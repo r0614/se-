@@ -1,0 +1,113 @@
+import java.awt.Container;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Vector;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+
+public class UberEats extends JFrame {
+	private Connection conn;
+	private Statement stmt;
+	private JList RestaurantIDList;
+	private JButton getRestaurant, insertRestaurant,deleteRestaurant,updateRestaurant;
+	private JTextArea errorText;
+	private JLabel RestaurantidLabel,locationLabel,ratingLabel,foodmenuLabel,openclosetimeLabel;
+	private JTextField RestaurantidText,locationText,ratingText,foodmenuText,openclosetimeText;
+	private ResultSet rs;
+	public UberEats()
+	{
+		try 
+		{
+	     Class.forName("oracle.jdbc.driver.OracleDriver");
+	    } 
+		catch (Exception e) 
+		{
+	      System.err.println("Unable to find and load driver");
+	      System.exit(1);
+	    }
+	}
+	private void loadRestaurant()
+	{
+		Vector v = new Vector();
+	    try 
+		{
+	      rs = stmt.executeQuery("SELECT * FROM UberEats");
+	      while (rs.next()) 
+		  {
+	        v.addElement(rs.getString("Rid"));
+	      }
+	    } 
+		catch (SQLException e) 
+		{ System.out.println("Error1");
+	      displaySQLErrors(e);
+	    }
+	    RestaurantIDList.setListData(v);
+	}
+	public void GUI() 
+	  {
+	    Container c = getContentPane();
+	    c.setLayout(new FlowLayout());
+	    RestaurantIDList = new JList();
+	    loadRestaurant();
+	    JScrollPane RestaurantIDListScrollPane = new JScrollPane(RestaurantIDList); 
+	    getRestaurant = new JButton("Get Restaurant Details");
+	    getRestaurant.addActionListener(new ActionListener() {
+	        public void actionPerformed(ActionEvent e) {
+	          try {
+	          rs = stmt.executeQuery("SELECT * FROM UberEats");
+	            while (rs.next()) 
+	  		  {
+	              if (rs.getString("Rid").equals(
+	            		  RestaurantIDList.getSelectedValue()))
+	                break;
+	            }
+	            if (!rs.isAfterLast()) {
+	            	RestaurantidText.setText(rs.getString("Restaurant id"));
+	            	locationText.setText(rs.getString("Location"));
+	            	ratingText.setText(rs.getString("Rating"));
+	            	foodmenuText.setText(rs.getString("Food Menu"));
+	            	openclosetimeText.setText(rs.getString("Open Close Time"));
+	            }
+	          } catch (SQLException selectException) {
+	  		  System.out.println("Error2");
+	            displaySQLErrors(selectException);
+	          }
+	        }
+	      });
+	    insertRestaurant = new JButton("Insert Restaurantt Details");
+	    insertRestaurant.addActionListener(new ActionListener() {
+	      public void actionPerformed(ActionEvent e) {
+	        try {
+	          Statement stmt = conn.createStatement();
+	          int i = stmt
+	              .executeUpdate("INSERT INTO UberEats VALUES(" + "'"
+	                  + RestaurantidText.getText() + "', " + "'"
+	                  + foodmenuText.getText() + "', " + "'" + locationText.getText() +"'," 
+	                  + openclosetimeText.getText() + ", "  + ratingText.getText()
+	                    + ")" );
+	          errorText.append("\nInserted " + i + " rows successfully");
+	          RestaurantIDList.removeAll();
+	          loadRestaurant();
+	        } catch (SQLException insertException) {
+			  System.out.println("Error3");
+	          displaySQLErrors(insertException);
+	        }
+	      }
+	    });
