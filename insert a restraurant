@@ -12,7 +12,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Vector;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -97,8 +96,8 @@ public class UberEats extends JFrame {
 	        try {
 	          Statement stmt = conn.createStatement();
 	          int i = stmt
-	              .executeUpdate("INSERT INTO UberEats VALUES(" + "'"
-	                  + RestaurantidText.getText() + "', " + "'"
+	              .executeUpdate("INSERT INTO UberEats VALUES(" + 
+	                  + RestaurantidText.getText() + ", " + "'"
 	                  + foodmenuText.getText() + "', " + "'" + locationText.getText() +"'," 
 	                  + openclosetimeText.getText() + ", "  + ratingText.getText()
 	                    + ")" );
