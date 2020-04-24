@@ -148,3 +148,91 @@ public class UberEats extends JFrame {
 	        }
 	      }
 	    });
+	    
+	    [12:24, 4/24/2020] Samhita:  JPanel pn = new JPanel(new GridLayout(1,2));
+	    JPanel pn1 = new JPanel(new GridLayout(5, 1));
+	    pn.add(RestaurantIDListScrollPane);
+	    pn1.add(getRestaurant);
+	    pn1.add(insertRestaurant);
+	    pn1.add(deleteRestaurant);
+	    pn1.add(updateRestaurant);
+	    pn.add(pn1);
+	    
+	    RestaurantidText = new JTextField(15);
+	    openclosetimeText = new JTextField(15);
+	    locationText = new JTextField(15);
+	    ratingText = new JTextField(15);
+	    foodmenuText = new JTextField(15);
+	    RestaurantidLabel = new JLabel("Restaurant ID");
+	    openclosetimeLabel = new JLabel("Open Close Time");
+	    locationLabel =new JLabel("Location");
+	    ratingLabel = new JLabel("Rating");
+	    foodmenuLabel = new JLabel("Food Menu");
+	    
+	    errorText = new JTextArea(5, 15);
+	    errorText.setEditable(false);
+	    
+	    JPanel pn2 = new JPanel();
+	    pn2.setLayout(new GridLayout(6, 1));
+	    pn2.add(RestaurantidLabel);
+	    pn2.add(RestaurantidText);
+	    pn2.add(locationLabel);
+	    pn2.add(locationText);
+	    pn2.add(foodmenuLabel);
+	    pn2.add(foodmenuText);
+	    pn2.add(openclosetimeLabel);
+	    pn2.add(openclosetimeText);
+	    pn2.add(ratingLabel);
+	    pn2.add(ratingText);
+
+	    
+	    JPanel pn3 = new JPanel();
+	    pn3.add(new JScrollPane(errorText));
+	    
+	    c.add(pn);
+	    c.add(pn2);
+	    c.add(pn3);
+	 
+	    setSize(500, 500);
+	    setVisible(true);
+	    
+}
+	public void connectToDB() {
+	    try {
+	      conn = DriverManager
+	          .getConnection("jdbc:oracle:thin:@localhost:1521:xe","system","OracleDBMS2090&");
+	      stmt = conn.createStatement();
+
+	    } catch (SQLException connectException) {
+	      System.out.println(connectException.getMessage());
+	      System.out.println(connectException.getSQLState());
+	      System.out.println(connectException.getErrorCode());
+	      System.exit(1);
+	    }
+	  }
+	
+	private void displaySQLErrors(SQLException e) {
+	    errorText.append("SQLException: " + e.getMessage() + "\n");
+	    errorText.append("SQLState:     " + e.getSQLState() + "\n");
+	    errorText.append("VendorError:  " + e.getErrorCode() + "\n");
+	  }
+
+	  private void init()
+	  {
+	    connectToDB();
+	  }
+	  
+	/*  public static void main(String[] args) 
+	  {
+	    UberEats ubr = new UberEats();
+
+	    ubr.addWindowListener((WindowListener) new WindowAdapter(){
+	      public void windowClosing(WindowEvent e) {
+	        System.exit(0);
+	      }
+	    });
+	    ubr.init();
+	    ubr.GUI();
+	  } */
+
+}
