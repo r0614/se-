@@ -105,7 +105,7 @@ public class UberEats extends JFrame {
 	          RestaurantIDList.removeAll();
 	          loadRestaurant();
 	        } catch (SQLException insertException) {
-			  System.out.println("Error3");
+			  //System.out.println("Error3");
 	          displaySQLErrors(insertException);
 	        }
 	      }
@@ -122,9 +122,29 @@ public class UberEats extends JFrame {
 	          RestaurantIDList.removeAll();
 	          loadRestaurant();
 	        } catch (SQLException insertException) {
-			  System.out.println("Error4");
+			 // System.out.println("Error4");
 	          displaySQLErrors(insertException);
 	        }
 	      }
 	    });
 	    
+ updateRestaurant = new JButton("Update Restaurant");
+	    updateRestaurant.addActionListener(new ActionListener() {
+	      public void actionPerformed(ActionEvent e) {
+	        try {
+	          Statement stmt = conn.createStatement();
+	          int i = stmt.executeUpdate("UPDATE UberEats "
+	              + "SET foodmenu='" + foodmenuText.getText() + "', "
+	              + "rating=" + ratingText.getText() + ", "
+	              + "location= '" + locationText.getText()+ "'," + 
+	              "openclosetime='"	+ openclosetimeText.getText() + "'," + "WHERE Rid = "
+	              + RestaurantIDList.getSelectedValue());
+	          errorText.append("\nUpdated " + i + " rows successfully");
+	          RestaurantIDList.removeAll();
+	          loadRestaurant(); 
+	        } catch (SQLException insertException) {
+			   System.out.println("Error5");
+	          displaySQLErrors(insertException);
+	        }
+	      }
+	    });
