@@ -111,3 +111,21 @@ public class UberEats extends JFrame {
 	        }
 	      }
 	    });
+ deleteRestaurant = new JButton("Delete Restaurant");
+	    deleteRestaurant.addActionListener(new ActionListener() {
+	      public void actionPerformed(ActionEvent e) {
+	        try {
+	          Statement stmt = conn.createStatement();
+	          int i = stmt
+	              .executeUpdate("DELETE FROM UberEats WHERE Rid = "
+	                  + RestaurantIDList.getSelectedValue());
+	          errorText.append("\nDeleted " + i + " rows successfully");
+	          RestaurantIDList.removeAll();
+	          loadRestaurant();
+	        } catch (SQLException insertException) {
+			  System.out.println("Error4");
+	          displaySQLErrors(insertException);
+	        }
+	      }
+	    });
+	    
